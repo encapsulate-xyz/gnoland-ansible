@@ -1,0 +1,7 @@
+---
+sync_home_dir: /opt/{{ service_identifier }}
+
+sync_data_dir: "{{ sync_home_dir }}/db"
+sync_config_dir: "{{ sync_home_dir }}/config"
+
+sync_priv_validator_state_file_path: "{{ sync_config_dir }}/{{ sync_priv_validator_state_file_name }}"
