@@ -12,9 +12,10 @@
     version: "{{ vars[project][type].version }}"
     force: true
 
-- name: Build Gnoland binary
+- name: Build Gnoland and Gnokey binaries
   ansible.builtin.shell: |
     go build -ldflags "-w -s" -o build/gnoland ./gno.land/cmd/gnoland
+    go build -ldflags "-w -s" -o build/gnokey ./gno.land/cmd/gnokey
   args:
     chdir: "{{ tmp_dir }}/{{ project }}"
     executable: /bin/bash
@@ -24,15 +25,20 @@
     GOPATH: "{{ go.path }}"
     GO111MODULE: "{{ go.module111 }}"
 
-- name: Copy the built binary to the target directory
+- name: Copy built binaries to the target directory
   ansible.builtin.copy:
-    src: "{{ tmp_dir }}/{{ project }}/build/{{ node_service_default_binary_name }}"
-    dest: "{{ node_bin_dir }}/{{ service_identifier }}"
+    src: "{{ tmp_dir }}/{{ project }}/build/{{ item.src }}"
+    dest: "{{ node_bin_dir }}/{{ item.dest }}"
     mode: "0755"
     owner: root
     group: root
     remote_src: true
     force: true
+  loop:
+    - src: "{{ node_service_default_binary_name }}"
+      dest: "{{ service_identifier }}"
+    - src: "{{ node_key_default_binary_name }}"
+      dest: "{{ service_identifier }}-key"
   notify:
     - Restart service
 
