@@ -1,0 +1,7 @@
+---
+ports:
+  suffix:
+    # Used for both p2p_laddr and p2p_external_address
+    p2p: 56
+    rpc: 57
+    abci: 58

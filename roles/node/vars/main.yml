@@ -1,0 +1,29 @@
+---
+# maintains file name, binary names, and anything which is not a directory or path
+
+# config file names
+node_config_file_name: config.toml
+node_priv_validator_key_file_name: priv_validator_key.json
+node_node_key_file_name: node_key.json
+node_genesis_file_name: genesis.json
+
+# Environment file names
+node_environment_general_file_name: "{{ service_identifier }}.env"
+
+# binary names
+node_service_default_binary_name: gnoland
+
+node_status_endpoint: status
+
+node_type_settings:
+  # config.toml
+  abci:
+    address:
+      default: tcp://127.0.0.1
+  rpc:
+    address:
+      validator: tcp://127.0.0.1
+      fullnode: tcp://0.0.0.0
+  p2p:
+    address:
+      default: tcp://0.0.0.0

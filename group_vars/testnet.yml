@@ -1,9 +1,10 @@
 ---
 # maintains versions and can overwrite all.yml
-sui:
+gnoland:
+  chain_id: test6
   validator:
-    version: 218db6e510d2d7fee0a6118fa87fc14baeabbd64
-  fullnode:
-    version: 218db6e510d2d7fee0a6118fa87fc14baeabbd64
-  bridge:
-    version: dce2e0683c2472a64858d13dc77b82448b4139f1
+    version: chain/test6
+    go:
+      version: 1.23.1
+    exporter_endpoint: "http:{{ monitor_server_dns }}:"
+  snapshot_url: https://snapshot.shazoes.xyz/testnets/snapshot-gnoland.tar.lz4

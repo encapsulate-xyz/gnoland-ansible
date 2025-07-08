@@ -1,0 +1,93 @@
+---
+- name: Include ufw vars file
+  ansible.builtin.include_vars:
+    file: vars/ufw_rules.yml
+
+- name: Apply UFW rules
+  ansible.builtin.include_tasks: tasks/apply_ufw_rules.yml
+  loop: "{{ node_ufw_rules[type] }}"
+
+- name: Set seeds
+  ansible.builtin.set_fact:
+    seeds: "{{ lookup('file', 'files/{{ env }}/seeds.txt').splitlines() | join(',') }}"
+
+- name: Set peers
+  ansible.builtin.set_fact:
+    peers: "{{ lookup('file', 'files/{{ env }}/peers.txt').splitlines() | join(',') }}"
+
+- name: Include user creation task
+  ansible.builtin.include_tasks: tasks/create_user_and_directories.yml
+  vars:
+    home: "{{ node_home_dir }}"
+    directories: "{{ node_directories }}"
+    lib_dir: "{{ node_lib_dir }}"
+    log_file_path: "{{ node_log_file_path }}"
+
+- name: Include build binary task
+  ansible.builtin.include_tasks: build_binary.yml
+
+- name: Get genesis and configuration files
+  block:
+    - name: Copy configuration file
+      ansible.builtin.template:
+        src: "{{ env }}/config.toml.j2"
+        dest: "{{ node_config_file_path }}"
+        owner: "{{ service_identifier }}"
+        group: "{{ service_identifier }}"
+        mode: "0644"
+      notify:
+        - Restart service
+
+    - name: Copy env file
+      ansible.builtin.template:
+        src: "{{ env }}/general.env.j2"
+        dest: "{{ node_environment_general_file_path }}"
+        owner: "{{ service_identifier }}"
+        group: "{{ service_identifier }}"
+        mode: "0644"
+      notify:
+        - Restart service
+
+    - name: Copy genesis file
+      ansible.builtin.copy:
+        src: "{{ env }}/genesis.json"
+        dest: "{{ node_genesis_file_path }}"
+        owner: "{{ service_identifier }}"
+        group: "{{ service_identifier }}"
+        mode: "0644"
+      notify:
+        - Restart service
+
+- name: Fetch secrets from HCP Vault and save to files
+  when:
+    - type == 'validator'
+    - fetch_validator_keys | default(false) | bool
+  block:
+    - name: Fetch priv validator key and save
+      ansible.builtin.include_tasks: tasks/get_and_save_vault_secret.yml
+      vars:
+        vault_secret_source_path: "{{ project }}/{{ org }}/{{ type }}/{{ node_priv_validator_key_file_name }}"
+        secret_destination_path: "{{ node_priv_validator_key_path }}"
+        secret_type: json
+
+    - name: Fetch node key and save
+      ansible.builtin.include_tasks: tasks/get_and_save_vault_secret.yml
+      vars:
+        vault_secret_source_path: "{{ project }}/{{ org }}/{{ type }}/{{ node_node_key_file_name }}"
+        secret_destination_path: "{{ node_node_key_path }}"
+        secret_type: json
+
+- name: Copy systemd service file
+  ansible.builtin.template:
+    src: "{{ env }}/systemd.service.j2"
+    dest: /etc/systemd/system/{{ service_identifier }}.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload service
+    - Restart service
+
+- name: Include coordinated update task
+  ansible.builtin.include_tasks: coordinated_update.yml
+  when: upgrade_height is defined
