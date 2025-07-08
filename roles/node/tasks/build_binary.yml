@@ -35,10 +35,10 @@
     remote_src: true
     force: true
   loop:
-    - src: "{{ node_service_default_binary_name }}"
-      dest: "{{ service_identifier }}"
-    - src: "{{ node_key_default_binary_name }}"
-      dest: "{{ service_identifier }}-key"
+    - src: "{{ node_binaries.gnoland_default.default_binary_name }}"
+      dest: "{{ node_binaries.gnoland_default.dest_binary_name }}"
+    - src: "{{ node_binaries.gnoland_key.default_binary_name }}"
+      dest: "{{ node_binaries.gnoland_key.dest_binary_name }}"
   notify:
     - Restart service
 
