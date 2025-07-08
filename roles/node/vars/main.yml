@@ -11,7 +11,13 @@ node_genesis_file_name: genesis.json
 node_environment_general_file_name: "{{ service_identifier }}.env"
 
 # binary names
-node_service_default_binary_name: gnoland
+node_binaries:
+  gnoland_default:
+    default_binary_name: "gnoland"
+    dest_binary_name: "{{ service_identifier }}"
+  gnoland_key:
+    default_binary_name: "gnokey"
+    dest_binary_name: "gnokey"
 
 node_status_endpoint: status
 
