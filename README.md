@@ -94,8 +94,8 @@ This playbook allows customization through several variables. You can define the
 | `gnoland.chain_id`                | `test7`                                               | Chain ID of the gnoland network                  |
 | `gnoland.validator.version`       | `chain/test7.2`                                       | Version of the gnoland node binary               |
 | `gnoland.validator.go.version`    | `1.23.1`                                              | Go toolchain version required for building binary  |
-| `gnoland.validator.exporter_endpoint` | `http://{{ monitor_server_dns }}:4323`                 | Otel metrics exporter endpoint for monitoring   |
-| `gnoland.snapshot_url`            | `https://snapshot.shazoes.xyz/testnets/snapshot-gnoland.tar.lz4` | URL for latest gnoland snapshot               |                                               |
+| `gnoland.validator.exporter_endpoint` | `your otel endpoint`                 | Otel metrics exporter endpoint for monitoring   |
+| `gnoland.snapshot_url`            | `snapshot url` | URL for latest gnoland snapshot               |                                               |
 
 - **`group_vars/ports.yml`**: Contains port suffix for node.
 
