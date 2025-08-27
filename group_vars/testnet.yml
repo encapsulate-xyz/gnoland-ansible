@@ -1,9 +1,9 @@
 ---
 # maintains versions and can overwrite all.yml
 gnoland:
-  chain_id: test6
+  chain_id: test7
   validator:
-    version: chain/test6
+    version: chain/test7.2
     go:
       version: 1.23.1
     exporter_endpoint: "http://{{ monitor_server_dns }}:4323"
