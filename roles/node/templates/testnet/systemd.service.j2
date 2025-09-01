@@ -7,7 +7,8 @@ Group={{ project }}
 WorkingDirectory={{ node_home_dir }}
 EnvironmentFile={{ node_environment_general_file_path }}
 ExecStart={{ node_bin_dir }}/{{ service_identifier }} start \
-    -data-dir {{ node_home_dir }} -genesis {{ node_genesis_file_path }}
+    -data-dir {{ node_home_dir }} -genesis {{ node_genesis_file_path }} \
+    -skip-genesis-sig-verification
 Restart=always
 RestartSec=4
 LimitNOFILE=65536
