@@ -24,7 +24,7 @@ home = ""
 moniker = "{{ org }}"
 
 # Path to the JSON file containing the private key to use for node authentication in the p2p protocol
-node_key_file = "config/node_key.json"
+node_key_file = "secrets/node_key.json"
 
 # TCP or UNIX socket address for the profiling server to listen on
 prof_laddr = ""
@@ -70,10 +70,10 @@ proxy_app = "{{ node_type_settings.abci.address.default }}:{{ abci_port }}"
     home = ""
 
     # Path to the JSON file containing the private key to use for signing using a local signer
-    local_signer = "config/priv_validator_key.json"
+    local_signer = "priv_validator_key.json"
 
     # Path to the JSON file containing the last validator state to prevent double-signing
-    sign_state = "config/priv_validator_state.json"
+    sign_state = "priv_validator_state.json"
 
     # Configuration for the remote signer client
     [consensus.priv_validator.remote_signer]
