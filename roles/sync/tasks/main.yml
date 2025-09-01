@@ -4,21 +4,6 @@
     name: "{{ service_identifier }}"
     state: stopped
 
-- name: Backup validator state file
-  block:
-    - name: Backup validator state file
-      ansible.builtin.copy:
-        src: "{{ sync_priv_validator_state_file_path }}"
-        dest: "{{ sync_home_dir }}"
-        remote_src: true
-        owner: "{{ service_identifier }}"
-        group: "{{ service_identifier }}"
-        mode: "0644"
-  rescue:
-    - name: Handle missing file
-      ansible.builtin.debug:
-        msg: Source file does not exist
-
 - name: Delete data folder
   ansible.builtin.file:
     path: "{{ sync_data_dir }}"
@@ -38,26 +23,6 @@
   args:
     executable: /bin/bash
     creates: "{{ sync_data_dir }}"
-
-- name: Handle Restore validator state file
-  block:
-    - name: Restore validator state file
-      ansible.builtin.copy:
-        src: "{{ sync_home_dir }}/priv_validator_state.json"
-        dest: "{{ sync_config_dir }}"
-        remote_src: true
-        owner: "{{ service_identifier }}"
-        group: "{{ service_identifier }}"
-        mode: "0644"
-
-    - name: Remove validator state file after copy
-      ansible.builtin.file:
-        path: "{{ sync_home_dir }}/{{ sync_priv_validator_state_file_name }}"
-        state: absent
-  rescue:
-    - name: Handle missing file
-      ansible.builtin.debug:
-        msg: Source file does not exist
 
 - name: Set ownership for data directory
   ansible.builtin.file:
