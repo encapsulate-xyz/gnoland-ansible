@@ -1,3 +1,2 @@
-g1gfxfm77dl3xtfrfnx5hg5f7u85sq2a9z2fa0uc@gnolan-testnet-rpc.shazoes.xyz:42656
-g137jz3hjhz6psrxxjtj5h7h4s6llfyrv2zxtfq3@gno-core-sen-01.test7.testnets.gno.land:26656
-g1kpxll39mgzfhsepazzs0vne2l42mmkylxkt6un@gno-core-sen-02.test7.testnets.gno.land:26656
+g142k7zc2qym3c0u6jmkf6rv26llgr2f4nakmlmt@sentry-1.test13.testnets.gno.land:26656
+g1lxkf9gn7kddrr26c640ww5wg3ezsm22we8cjpc@sentry-2.test13.testnets.gno.land:26656
