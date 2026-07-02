@@ -48,9 +48,9 @@
       notify:
         - Restart service
 
-    - name: Copy genesis file
-      ansible.builtin.copy:
-        src: "{{ env }}/genesis.json"
+    - name: Download genesis file
+      ansible.builtin.get_url:
+        url: "{{ gnoland.genesis_url }}"
         dest: "{{ node_genesis_file_path }}"
         owner: "{{ service_identifier }}"
         group: "{{ service_identifier }}"
