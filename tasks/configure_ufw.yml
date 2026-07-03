@@ -24,3 +24,4 @@
     rule: limit
     name: OpenSSH
     comment: limit SSH from any ip on tcp protocol
+    delete: true

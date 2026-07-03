@@ -61,7 +61,7 @@
 - name: Fetch secrets from HCP Vault and save to files
   when:
     - type == 'validator'
-    - fetch_validator_keys | default(false) | bool
+    - fetch_vault_secrets | default(false) | bool
   block:
     - name: Fetch priv validator key and save
       ansible.builtin.include_tasks: tasks/get_and_save_vault_secret.yml
