@@ -5,7 +5,6 @@ abci = "socket"
 #* lmdbdb (github.com/bmatsuo/lmdb-go)
 #  - B+ tree with mmap, fastest reads at scale
 #  - requires CGo
-#  - default
 #* mdbxdb (github.com/erigontech/mdbx-go)
 #  - MDBX (improved LMDB fork), B+ tree with mmap
 #  - auto-grows, better write perf, used by Erigon
@@ -13,6 +12,7 @@ abci = "socket"
 #* pebbledb (github.com/cockroachdb/pebble)
 #  - LSM tree, pure go
 #  - stable
+#  - default
 #* goleveldb (github.com/syndtr/goleveldb)
 #  - pure go
 #  - stable
@@ -94,7 +94,7 @@ local_signer = "priv_validator_key.json"
 # Path to the JSON file containing the last validator state to prevent double-signing
 sign_state = "priv_validator_state.json"
 
-# Configuration for the remote signer client
+# Configuration for the remote signer client (gnokms)
 [consensus.priv_validator.remote_signer]
 
 # Maximum number of retries to dial the remote signer. If set to -1, will retry indefinitely
@@ -118,6 +118,33 @@ tcp_authorized_keys = []
 # Keep alive period for the remote signer connection (only for TCP)
 tcp_keep_alive_period = "2s"
 
+# Configuration for upstream-Tendermint-protocol signer (tmkms / Horcrux). Empty listen_addr disables this mode.
+[consensus.priv_validator.tmkms_listener]
+
+# Allowlist of expected signer pubkeys (hex-encoded ed25519). Required for tcp:// listeners; ignored for unix:// (use filesystem permissions).
+allowed_kms_pubkeys = []
+
+# Chain ID sent to the signer; must match tmkms.toml's [[validator]] chain_id.
+chain_id = ""
+
+# Address to listen on for upstream-protocol signer connections (e.g. tmkms). Empty to disable.
+listen_addr = ""
+
+# Upstream Tendermint privval dialect to speak (only "v0.34" supported). Must match tmkms.toml's [[validator]] protocol_version.
+protocol_version = "v0.34"
+
+# Per-Sign retry attempts on transient errors. 0 = infinite (default 5).
+retries = 5
+
+# Sleep between retry attempts (default 1s).
+retry_timeout = "1s"
+
+# Read/write deadline for signer connections (default 5s).
+timeout_read_write = "5s"
+
+# Max time to wait for signer to dial in at startup (default 60s).
+wait_for_connection_timeout = "1m0s"
+
 ##### mempool configuration options #####
 [mempool]
 broadcast = true
@@ -139,11 +166,14 @@ wal_dir = ""
 ##### peer to peer configuration options #####
 [p2p]
 
+# Path to the address book file used to persist discovered peers across restarts
+addr_book_file = "{{ node_config_dir }}/addrbook.json"
+
 # Address to advertise to peers for them to dial
 # If empty, will use the same port as the laddr,
 # and will introspect on the listener or use UPnP
 # to figure out the address.
-  external_address = "{{ node_sentry_settings.external_address[type] | default(inventory_hostname + ':' + p2p_port) }}"
+external_address = "{{ node_sentry_settings.external_address[type] | default(inventory_hostname + ':' + p2p_port) }}"
 
 # Time to wait before flushing messages out on the connection
 flush_throttle_timeout = "10ms"
@@ -207,6 +237,18 @@ grpc_laddr = ""
 grpc_max_open_connections = 900
 home = ""
 
+# How long a keep-alive HTTP connection may sit idle between requests
+# before the RPC server closes it. Zero falls back to the server's read
+# timeout (currently 10s, not separately configurable), per Go's
+# net/http — the historical behavior. Reverse proxies that pool backend
+# connections (AWS ALB, nginx, ...) need this LARGER than their own idle
+# timeout, or connection reuse races the server's close and surfaces as
+# intermittent 502s at the proxy. The number of simultaneously idle
+# connections is bounded by max_open_connections; with
+# max_open_connections = 0 (unlimited), a large idle_timeout permits
+# unbounded idle-connection accumulation.
+idle_timeout = "0s"
+
 # TCP or UNIX socket address for the RPC server to listen on
 laddr = "{{ node_type_settings.rpc.address[type] }}:{{ rpc_port }}"
 
@@ -260,7 +302,7 @@ service_instance_id = "tm2-node-1"
 
 # in Prometheus this is transformed into the label 'exported_job'
 service_name = "tm2"
-traces_enabled = true
+traces_enabled = false
 
 ##### event store #####
 [tx_event_store]
