@@ -1,10 +1,10 @@
 ---
 # maintains versions and can overwrite all.yml
 gnoland:
-  chain_id: test-13
-  genesis_url: https://github.com/gnolang/gno/releases/download/chain/test13/genesis.json
+  chain_id: topaz-1
+  genesis_url: https://github.com/gnolang/gno/releases/download/chain/topaz/genesis.json
   validator:
-    version: chain/test13
+    version: chain/topaz
     go:
       version: 1.25.9
     exporter_endpoint: "http://{{ monitor_server_dns }}:4323"
