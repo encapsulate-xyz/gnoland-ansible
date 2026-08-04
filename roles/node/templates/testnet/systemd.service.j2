@@ -10,7 +10,8 @@ ExecStart={{ node_bin_dir }}/{{ service_identifier }} start \
     -chainid {{ gnoland.chain_id }} \
     -data-dir {{ node_home_dir }} \
     -genesis {{ node_genesis_file_path }} \
-    -skip-genesis-sig-verification
+    -skip-genesis-sig-verification \
+    -log-level info
 Restart=always
 RestartSec=4
 LimitNOFILE=65536
