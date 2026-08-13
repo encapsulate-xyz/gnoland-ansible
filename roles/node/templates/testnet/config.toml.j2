@@ -238,15 +238,9 @@ grpc_max_open_connections = 900
 home = ""
 
 # How long a keep-alive HTTP connection may sit idle between requests
-# before the RPC server closes it. Zero falls back to the server's read
-# timeout (currently 10s, not separately configurable), per Go's
-# net/http — the historical behavior. Reverse proxies that pool backend
-# connections (AWS ALB, nginx, ...) need this LARGER than their own idle
-# timeout, or connection reuse races the server's close and surfaces as
-# intermittent 502s at the proxy. The number of simultaneously idle
-# connections is bounded by max_open_connections; with
-# max_open_connections = 0 (unlimited), a large idle_timeout permits
-# unbounded idle-connection accumulation.
+# before the server closes it. Zero falls back to the read timeout (10s).
+# Set it larger than the idle timeout of any reverse proxy in front of
+# the node to avoid intermittent 502s from reuse of closed connections.
 idle_timeout = "0s"
 
 # TCP or UNIX socket address for the RPC server to listen on

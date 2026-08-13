@@ -1,12 +1,2 @@
-g19q07ssuafhmg6r7ys7wp7rpc4jxc85cpvdy426@seed-1.topaz.testnets.gno.land:26656
-g15k98e65gm8h7fdr3yr4tqn82lvch4a97a3sg3j@seed-2.topaz.testnets.gno.land:26656
-g10zqystndwphs4aumuj8fujmh0z5ep9lmx9fnpl@38.49.212.137:36656
-g138usej2c7hvcqec6wzsqwaw2zexnngx0hrpele@208.76.222.122:36656
-g1393shc3547t6yyva69hnpwmqnc0psxkyhknljw@152.53.245.124:26656
-g15k98e65gm8h7fdr3yr4tqn82lvch4a97a3sg3j@108.132.15.161:26656
-g163g9pyzc8l83ta5qmedmckfywrtzhvknxlsmks@85.195.116.219:26680
-g17d5epdngr7yt7n5tn9xx0xm38s870475c6gnsk@46.224.197.243:55656
-g17mkvewp957pvcu2n5m7y2cpmpl7fdzlajhqm53@149.202.68.156:26676
-g17qp5xc8a607svp77h3ttl05mg4fuzyl5fyvc2r@152.53.253.167:55656
-g17t7vlg7hjvsldqj06zenkxpktzntkp62thg9a7@65.109.106.214:55656
-g18ahqzryula7y9j6w4v7fnkc0l6djn3rvguhld8@135.181.17.54:26656
+g10xll77gz6yzg43v9mdalj8360ng6sunt2vvvhf@seed-1.sapphire.testnets.gno.land:26656
+g1gw2d7qsmrg06p204ty2qs8ygzd32t2c7p46te0@seed-2.sapphire.testnets.gno.land:26656
