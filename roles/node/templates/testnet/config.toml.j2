@@ -169,6 +169,9 @@ wal_dir = ""
 # Path to the address book file used to persist discovered peers across restarts
 addr_book_file = "{{ node_config_dir }}/addrbook.json"
 
+# Toggle to disable guard against peers connecting from the same ip
+allow_duplicate_ip = false
+
 # Address to advertise to peers for them to dial
 # If empty, will use the same port as the laddr,
 # and will introspect on the listener or use UPnP
@@ -191,6 +194,11 @@ max_num_outbound_peers = 40
 # Maximum size of a message packet payload, in bytes
 max_packet_msg_payload_size = 1024
 
+# Maximum total bytes buffered for incomplete incoming messages, across all of a connection's channels.
+# This is the per-connection bound on memory a peer can pin, so the node's worst case is this times the peer limits.
+# 0 disables the budget, leaving only each channel's own capacity.
+max_recv_buffer_bytes = 20971520
+
 # Comma separated list of nodes to keep persistent connections to
 persistent_peers = "{{ node_sentry_settings.persistent_peers[type] | default(peers) }}"
 
@@ -199,6 +207,11 @@ pex = {{ (node_sentry_settings.pex[type] | default(true)) | tojson }}
 
 # Comma separated list of peer IDs to keep private (will not be gossiped to other peers)
 private_peer_ids = "{{ node_sentry_settings.private_peer_ids[type] | default() }}"
+
+# Maximum time a single incoming message may spend being assembled from partial packets.
+# The deadline is anchored to the first partial packet of a message and is not extended by later ones,
+# so a peer cannot hold buffer space indefinitely by dribbling packets. 0 disables the deadline.
+recv_assembly_timeout = "30s"
 
 # Rate at which packets can be received, in bytes/second
 recv_rate = 5120000
