@@ -9,6 +9,7 @@
     - group_vars/all.yml
     - group_vars/ports.yml
     - group_vars/{{ env }}.yml
+    - roles/node/defaults/main.yml
 
   pre_tasks:
     - name: Setup environment and dependencies
@@ -27,3 +28,15 @@
         - name: Include sync role
           ansible.builtin.include_role:
             name: sync
+
+  post_tasks:
+    - name: Verify node
+      when: type in allowed_node_types
+      block:
+        # A sync doesn't install a binary, and the pinned version can be ahead of the running one while an upgrade
+        # waits for its height, so there is no version check
+        - name: Include verify service task
+          ansible.builtin.include_tasks: tasks/verify_service.yml
+          vars:
+            log_file_path: "{{ node_log_file_path }}"
+            health_url: "http://localhost:{{ rpc_port }}/health"
